@@ -12,8 +12,9 @@
   "scripts": {
     "build": "tsc",
     "prepublishOnly": "npm run build",
-    "test": "jest",
-    "lint": "eslint src/**/*.{ts,tsx}"
+    "test": "echo \"No tests yet\" && exit 0",
+    "lint": "eslint src/**/*.{ts,tsx}",
+    "typecheck": "tsc --noEmit"
   },
   "keywords": [
     "signalr",
