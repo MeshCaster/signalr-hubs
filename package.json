@@ -41,7 +41,7 @@
   "devDependencies": {
     "@microsoft/signalr": "^8.0.0",
     "@types/node": "^24.9.1",
-    "@types/react": "^18.2.0",
+    "@types/react": "^19.2.2",
     "@types/react-native": "^0.72.0",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
