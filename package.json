@@ -11,9 +11,15 @@
   ],
   "scripts": {
     "build": "tsc",
+    "clean": "rm -rf dist",
+    "prebuild": "npm run clean",
+    "watch": "tsc --watch",
     "prepublishOnly": "npm run build",
-    "test": "jest",
-    "lint": "eslint src/**/*.{ts,tsx}"
+    "test": "echo \"No tests yet\" && exit 0",
+    "lint": "eslint src/**/*.{ts,tsx} --max-warnings 0",
+    "lint:fix": "eslint src/**/*.{ts,tsx} --fix",
+    "format": "prettier --write \"src/**/*.{ts,tsx}\"",
+    "typecheck": "tsc --noEmit"
   },
   "keywords": [
     "signalr",
@@ -21,7 +27,8 @@
     "realtime",
     "react",
     "react-native",
-    "typescript"
+    "typescript",
+    "meshcaster"
   ],
   "author": "MeshCaster",
   "license": "MIT",
@@ -33,18 +40,21 @@
     "registry": "https://npm.pkg.github.com"
   },
   "peerDependencies": {
-    "react": ">=16.8.0",
-    "react-native": ">=0.60.0",
-    "@microsoft/signalr": ">=7.0.0"
+    "@microsoft/signalr": ">=7.0.0",
+    "react": ">=16.8.0"
+  },
+  "peerDependenciesMeta": {
+    "react-native": {
+      "optional": true
+    }
   },
   "devDependencies": {
-    "@types/react": "^18.2.0",
-    "@types/react-native": "^0.72.0",
     "@microsoft/signalr": "^8.0.0",
-    "typescript": "^5.0.0",
-    "eslint": "^8.0.0",
+    "@types/react": "^18.2.0",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
-    "@typescript-eslint/parser": "^6.0.0"
-  },
-  "dependencies": {}
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "prettier": "^3.0.0",
+    "typescript": "^5.0.0"
+  }
 }
