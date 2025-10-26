@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { ChatHub } from '../hubs/ChatHub';
 import { useHub } from './useHub';
 
-interface Message {
+export interface Message {
     user: string;
     text: string;
     timestamp: Date;

@@ -9,6 +9,15 @@ export type {
     ConnectionState as HubConnectionState,
 } from './core/abstractions';
 
+export type {
+    HubConnection,
+    IHttpConnectionOptions,
+    IRetryPolicy,
+    IStreamResult,
+    ISubscription,
+    LogLevel,
+} from '@microsoft/signalr';
+
 // Types
 export type { HubConfig, SignalRContextValue, ConnectionState } from './core/types';
 
