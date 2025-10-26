@@ -1,13 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.useHub = useHub;
 // src/signalr/hooks/useHub.ts
@@ -28,15 +19,15 @@ function useHub(hubName, options = {}) {
         throw new Error(`Hub "${hubName}" not found. Make sure it's registered in SignalRProvider.`);
     }
     const updateConnectionState = (0, react_1.useCallback)((updates) => {
-        setConnectionState((prev) => (Object.assign(Object.assign({}, prev), updates)));
+        setConnectionState((prev) => ({ ...prev, ...updates }));
     }, []);
-    const connect = (0, react_1.useCallback)(() => __awaiter(this, void 0, void 0, function* () {
+    const connect = (0, react_1.useCallback)(async () => {
         if (connectionState.isConnecting || connectionState.isConnected) {
             return;
         }
         updateConnectionState({ isConnecting: true, error: null });
         try {
-            yield hub.start();
+            await hub.start();
             updateConnectionState({
                 isConnected: true,
                 isConnecting: false,
@@ -51,10 +42,10 @@ function useHub(hubName, options = {}) {
             });
             throw error;
         }
-    }), [hub, connectionState.isConnecting, connectionState.isConnected, updateConnectionState]);
-    const disconnect = (0, react_1.useCallback)(() => __awaiter(this, void 0, void 0, function* () {
+    }, [hub, connectionState.isConnecting, connectionState.isConnected, updateConnectionState]);
+    const disconnect = (0, react_1.useCallback)(async () => {
         try {
-            yield hub.stop();
+            await hub.stop();
             updateConnectionState({
                 isConnected: false,
                 connectionId: null,
@@ -63,13 +54,13 @@ function useHub(hubName, options = {}) {
         catch (error) {
             console.error('Error disconnecting from hub:', error);
         }
-    }), [hub, updateConnectionState]);
-    const invoke = (0, react_1.useCallback)((methodName, ...args) => __awaiter(this, void 0, void 0, function* () {
+    }, [hub, updateConnectionState]);
+    const invoke = (0, react_1.useCallback)(async (methodName, ...args) => {
         if (!connectionState.isConnected) {
             throw new Error('Hub is not connected');
         }
         return hub.invoke(methodName, ...args);
-    }), [hub, connectionState.isConnected]);
+    }, [hub, connectionState.isConnected]);
     const on = (0, react_1.useCallback)((methodName, handler) => {
         const subscription = hub.on(methodName, handler);
         eventHandlersRef.current.push({
@@ -148,3 +139,4 @@ function useHub(hubName, options = {}) {
         connectionId: connectionState.connectionId,
     };
 }
+//# sourceMappingURL=useHub.js.map

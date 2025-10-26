@@ -57,3 +57,4 @@ const HubDebugger = () => {
                     hub.connectionId || 'N/A'))))))));
 };
 exports.HubDebugger = HubDebugger;
+//# sourceMappingURL=HubDebugger.js.map

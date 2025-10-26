@@ -36,3 +36,4 @@ const getBaseUrl = () => {
     return process.env.REACT_APP_API_URL || 'http://localhost:5000';
 };
 exports.getBaseUrl = getBaseUrl;
+//# sourceMappingURL=hubConfig.js.map

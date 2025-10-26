@@ -33,3 +33,4 @@ Object.defineProperty(exports, "DashboardHub", { enumerable: true, get: function
 var hubConfig_1 = require("./config/hubConfig");
 Object.defineProperty(exports, "getHubConfigs", { enumerable: true, get: function () { return hubConfig_1.getHubConfigs; } });
 Object.defineProperty(exports, "getBaseUrl", { enumerable: true, get: function () { return hubConfig_1.getBaseUrl; } });
+//# sourceMappingURL=index.js.map

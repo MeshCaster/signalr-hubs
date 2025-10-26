@@ -30,3 +30,4 @@ function usePersistentChatHub(options = {}) {
     }, [chatHub.messages]);
     return chatHub;
 }
+//# sourceMappingURL=usePersistentChatHub.js.map

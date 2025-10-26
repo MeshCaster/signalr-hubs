@@ -5,3 +5,4 @@ var ChatHub_1 = require("./ChatHub");
 Object.defineProperty(exports, "ChatHub", { enumerable: true, get: function () { return ChatHub_1.ChatHub; } });
 var NotificationHub_1 = require("./NotificationHub");
 Object.defineProperty(exports, "NotificationHub", { enumerable: true, get: function () { return NotificationHub_1.NotificationHub; } });
+//# sourceMappingURL=index.js.map

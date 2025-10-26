@@ -32,15 +32,6 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SignalRHubManager = exports.BaseSignalRHub = exports.ConnectionState = void 0;
 const signalR = __importStar(require("@microsoft/signalr"));
@@ -127,44 +118,40 @@ class BaseSignalRHub {
     /**
      * Start the connection
      */
-    start() {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (this._state === ConnectionState.Connected ||
-                this._state === ConnectionState.Connecting) {
-                return;
-            }
-            this._state = ConnectionState.Connecting;
-            try {
-                yield this.connection.start();
-                this._state = ConnectionState.Connected;
-                this.connectionHandlers.forEach((handler) => handler());
-                yield this.onConnected();
-            }
-            catch (error) {
-                this._state = ConnectionState.Disconnected;
-                throw error;
-            }
-        });
+    async start() {
+        if (this._state === ConnectionState.Connected ||
+            this._state === ConnectionState.Connecting) {
+            return;
+        }
+        this._state = ConnectionState.Connecting;
+        try {
+            await this.connection.start();
+            this._state = ConnectionState.Connected;
+            this.connectionHandlers.forEach((handler) => handler());
+            await this.onConnected();
+        }
+        catch (error) {
+            this._state = ConnectionState.Disconnected;
+            throw error;
+        }
     }
     /**
      * Stop the connection
      */
-    stop() {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (this._state === ConnectionState.Disconnected) {
-                return;
-            }
-            this._state = ConnectionState.Disconnecting;
-            try {
-                yield this.connection.stop();
-                this._state = ConnectionState.Disconnected;
-                this.disconnectionHandlers.forEach((handler) => handler());
-            }
-            catch (error) {
-                this._state = ConnectionState.Disconnected;
-                throw error;
-            }
-        });
+    async stop() {
+        if (this._state === ConnectionState.Disconnected) {
+            return;
+        }
+        this._state = ConnectionState.Disconnecting;
+        try {
+            await this.connection.stop();
+            this._state = ConnectionState.Disconnected;
+            this.disconnectionHandlers.forEach((handler) => handler());
+        }
+        catch (error) {
+            this._state = ConnectionState.Disconnected;
+            throw error;
+        }
     }
     /**
      * Subscribe to a hub method (server -> client)
@@ -210,18 +197,14 @@ class BaseSignalRHub {
     /**
      * Invoke a hub method (client -> server)
      */
-    invoke(methodName, ...args) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return this.connection.invoke(methodName, ...args);
-        });
+    async invoke(methodName, ...args) {
+        return this.connection.invoke(methodName, ...args);
     }
     /**
      * Send a hub method without waiting for response (client -> server)
      */
-    send(methodName, ...args) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return this.connection.send(methodName, ...args);
-        });
+    async send(methodName, ...args) {
+        return this.connection.send(methodName, ...args);
     }
     /**
      * Stream from server
@@ -334,15 +317,11 @@ class SignalRHubManager {
     get(name) {
         return this.hubs.get(name);
     }
-    startAll() {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield Promise.all(Array.from(this.hubs.values()).map((hub) => hub.start()));
-        });
+    async startAll() {
+        await Promise.all(Array.from(this.hubs.values()).map((hub) => hub.start()));
     }
-    stopAll() {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield Promise.all(Array.from(this.hubs.values()).map((hub) => hub.stop()));
-        });
+    async stopAll() {
+        await Promise.all(Array.from(this.hubs.values()).map((hub) => hub.stop()));
     }
     disposeAll() {
         this.hubs.forEach((hub) => hub.dispose());
@@ -350,3 +329,4 @@ class SignalRHubManager {
     }
 }
 exports.SignalRHubManager = SignalRHubManager;
+//# sourceMappingURL=abstractions.js.map

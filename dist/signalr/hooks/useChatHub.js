@@ -1,13 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.useChatHub = useChatHub;
 // src/signalr/hooks/useChatHub.ts
@@ -25,15 +16,15 @@ function useChatHub(options = {}) {
             on('ReceiveMessage', (user, message, timestamp) => {
                 const msg = { user, text: message, timestamp };
                 setMessages((prev) => [...prev, msg]);
-                onMessageReceived === null || onMessageReceived === void 0 ? void 0 : onMessageReceived(msg);
+                onMessageReceived?.(msg);
             }),
             on('UserJoined', (user) => {
                 setUsers((prev) => [...prev, user]);
-                onUserJoined === null || onUserJoined === void 0 ? void 0 : onUserJoined(user);
+                onUserJoined?.(user);
             }),
             on('UserLeft', (user) => {
                 setUsers((prev) => prev.filter((u) => u !== user));
-                onUserLeft === null || onUserLeft === void 0 ? void 0 : onUserLeft(user);
+                onUserLeft?.(user);
             }),
         ];
         return () => {
@@ -46,14 +37,14 @@ function useChatHub(options = {}) {
             joinRoom(autoJoinRoom);
         }
     }, [isConnected, autoJoinRoom]);
-    const joinRoom = (0, react_1.useCallback)((roomName) => __awaiter(this, void 0, void 0, function* () {
+    const joinRoom = (0, react_1.useCallback)(async (roomName) => {
         try {
-            const success = yield invoke('JoinRoom', roomName);
+            const success = await invoke('JoinRoom', roomName);
             if (success) {
                 setCurrentRoom(roomName);
                 setMessages([]);
                 // Fetch online users
-                const onlineUsers = yield invoke('GetOnlineUsers');
+                const onlineUsers = await invoke('GetOnlineUsers');
                 setUsers(onlineUsers);
             }
             return success;
@@ -62,12 +53,12 @@ function useChatHub(options = {}) {
             console.error('Failed to join room:', error);
             throw error;
         }
-    }), [invoke]);
-    const leaveRoom = (0, react_1.useCallback)(() => __awaiter(this, void 0, void 0, function* () {
+    }, [invoke]);
+    const leaveRoom = (0, react_1.useCallback)(async () => {
         if (!currentRoom)
             return;
         try {
-            yield invoke('LeaveRoom', currentRoom);
+            await invoke('LeaveRoom', currentRoom);
             setCurrentRoom(null);
             setMessages([]);
             setUsers([]);
@@ -76,27 +67,27 @@ function useChatHub(options = {}) {
             console.error('Failed to leave room:', error);
             throw error;
         }
-    }), [currentRoom, invoke]);
-    const sendMessage = (0, react_1.useCallback)((message) => __awaiter(this, void 0, void 0, function* () {
+    }, [currentRoom, invoke]);
+    const sendMessage = (0, react_1.useCallback)(async (message) => {
         if (!currentRoom) {
             throw new Error('Not in a room');
         }
         try {
-            yield invoke('SendMessage', message);
+            await invoke('SendMessage', message);
         }
         catch (error) {
             console.error('Failed to send message:', error);
             throw error;
         }
-    }), [currentRoom, invoke]);
-    const setTyping = (0, react_1.useCallback)((isTyping) => __awaiter(this, void 0, void 0, function* () {
+    }, [currentRoom, invoke]);
+    const setTyping = (0, react_1.useCallback)(async (isTyping) => {
         try {
-            yield invoke('SetTyping', isTyping);
+            await invoke('SetTyping', isTyping);
         }
         catch (error) {
             console.error('Failed to set typing status:', error);
         }
-    }), [invoke]);
+    }, [invoke]);
     return {
         // Connection state
         isConnected,
@@ -116,3 +107,4 @@ function useChatHub(options = {}) {
         clearMessages: () => setMessages([]),
     };
 }
+//# sourceMappingURL=useChatHub.js.map

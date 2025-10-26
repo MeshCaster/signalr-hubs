@@ -35,3 +35,4 @@ const ConnectionStatus = ({ hubName, connectionState, onReconnect, className = '
         error && onReconnect && (react_1.default.createElement("button", { onClick: onReconnect, className: "text-xs text-blue-500 hover:text-blue-700" }, "Reconnect"))));
 };
 exports.ConnectionStatus = ConnectionStatus;
+//# sourceMappingURL=ConnectionStatus.js.map
